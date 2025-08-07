@@ -40,11 +40,20 @@ export const search = action({
                 taskType: TaskType.RETRIEVAL_DOCUMENT,
                 title: "Document title",
             }), {ctx});                   
-    const resultOne = (await vectorStore.similaritySearch(args.query, 10))
-    .filter(q=>q.metadata.fileId==args.fileId);
+    // const resultOne = (await vectorStore.similaritySearch(args.query, 10))
+    // .filter(q=>q.metadata.fileId==args.fileId);
     // console.log(resultOne)
 
-    return JSON.stringify(resultOne)
+      const ww = resultOne.filter(q => {
+  // Join all values in metadata to reconstruct the fileId
+  const metaString = Object.values(q.metadata).join('');
+  return metaString === args.fileId;
+});
+// console.log("pooo: ", ww);
+
+    return JSON.stringify(ww)
+      
+    // return JSON.stringify(resultOne)
   },
 })
 
